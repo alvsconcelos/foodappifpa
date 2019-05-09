@@ -27,7 +27,8 @@
  * @subpackage Foodappifpa/includes
  * @author     Alvaro Vasconcelos <ialvsconcelos@gmail.com>
  */
-class Foodappifpa {
+class Foodappifpa
+{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -66,8 +67,9 @@ class Foodappifpa {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
-		if ( defined( 'FOODAPPIFPA_VERSION' ) ) {
+	public function __construct()
+	{
+		if (defined('FOODAPPIFPA_VERSION')) {
 			$this->version = FOODAPPIFPA_VERSION;
 		} else {
 			$this->version = '1.0.0';
@@ -78,7 +80,6 @@ class Foodappifpa {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -97,33 +98,33 @@ class Foodappifpa {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function load_dependencies()
+	{
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-foodappifpa-loader.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-foodappifpa-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-foodappifpa-i18n.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-foodappifpa-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-foodappifpa-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-foodappifpa-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-foodappifpa-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-foodappifpa-public.php';
 
 		$this->loader = new Foodappifpa_Loader();
-
 	}
 
 	/**
@@ -135,12 +136,12 @@ class Foodappifpa {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function set_locale() {
+	private function set_locale()
+	{
 
 		$plugin_i18n = new Foodappifpa_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
 
 	/**
@@ -150,12 +151,36 @@ class Foodappifpa {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks()
+	{
 
-		$plugin_admin = new Foodappifpa_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Foodappifpa_Admin($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		/**
+		 * Dependencies
+		 */
+		
+		$plugin_admin->create_seller_role();
+
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+		$this->loader->add_action('init', $plugin_admin, 'create_food_products_post_type');
+		$this->loader->add_action('init', $plugin_admin, 'create_food_taxonomy');
+
+		/**
+		 * Metaboxes
+		 */
+
+		$this->loader->add_action('cmb2_init', $plugin_admin, 'create_seller_data_metaboxes');
+		$this->loader->add_action('cmb2_init', $plugin_admin, 'create_product_data_metaboxes');
+
+		/**
+		 * Filters
+		 */
+
+		$this->loader->add_filter('use_block_editor_for_post_type', $plugin_admin, 'disable_gutenberg', 10, 2);
+		$this->loader->add_filter('enter_title_here', $plugin_admin, 'change_default_title');
+		$this->loader->add_filter('cmb2_render_opening_hours', $plugin_admin, 'cmb2_render_opening_hours_field_callback', 10, 5);
 
 	}
 
@@ -166,13 +191,13 @@ class Foodappifpa {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
+	private function define_public_hooks()
+	{
 
-		$plugin_public = new Foodappifpa_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Foodappifpa_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 	}
 
 	/**
@@ -180,7 +205,8 @@ class Foodappifpa {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
@@ -191,7 +217,8 @@ class Foodappifpa {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
@@ -201,7 +228,8 @@ class Foodappifpa {
 	 * @since     1.0.0
 	 * @return    Foodappifpa_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
@@ -211,8 +239,8 @@ class Foodappifpa {
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_version() {
+	public function get_version()
+	{
 		return $this->version;
 	}
-
 }

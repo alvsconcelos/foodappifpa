@@ -1,4 +1,9 @@
-/**
- * All of the CSS for your admin-specific functionality should be
- * included in this file.
- */
+.menu-icon-food_sellers, .menu-icon-food_products {
+    background-color: #FF5722;
+    /* border: 2px solid #FF7043; */
+}
+
+.wp-menu-open.menu-icon-food_sellers, .wp-menu-open.menu-icon-food_products {
+    background-color: #FF3D00 !important;
+    border: 2px solid #FF7043;
+}
