@@ -159,13 +159,14 @@ class Foodappifpa
 		/**
 		 * Dependencies
 		 */
-		
+
 		$plugin_admin->create_seller_role();
 
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 		$this->loader->add_action('init', $plugin_admin, 'create_food_products_post_type');
 		$this->loader->add_action('init', $plugin_admin, 'create_food_taxonomy');
+		$this->loader->add_action('add_meta_boxes_food_products', $plugin_admin, 'change_author_box_title');
 
 		/**
 		 * Metaboxes
@@ -173,6 +174,7 @@ class Foodappifpa
 
 		$this->loader->add_action('cmb2_init', $plugin_admin, 'create_seller_data_metaboxes');
 		$this->loader->add_action('cmb2_init', $plugin_admin, 'create_product_data_metaboxes');
+		$this->loader->add_action('cmb2_save_field__faproduct_fireSavedEvent', $plugin_admin, 'my_post_save_function', 20, 3);
 
 		/**
 		 * Filters
@@ -180,8 +182,9 @@ class Foodappifpa
 
 		$this->loader->add_filter('use_block_editor_for_post_type', $plugin_admin, 'disable_gutenberg', 10, 2);
 		$this->loader->add_filter('enter_title_here', $plugin_admin, 'change_default_title');
+		$this->loader->add_filter('wp_dropdown_users_args', $plugin_admin, 'show_only_sellers_on_food_ctp', 10, 2);
 		$this->loader->add_filter('cmb2_render_opening_hours', $plugin_admin, 'cmb2_render_opening_hours_field_callback', 10, 5);
-
+		// add_filter( 'wp_dropdown_users_args', 'change_user_dropdown', 10, 2 );
 	}
 
 	/**

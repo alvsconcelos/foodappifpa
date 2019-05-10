@@ -105,53 +105,6 @@ class Foodappifpa_Admin
 	 * Food sellers
 	 */
 
-	/*
-	// Create custom post type
-
-	public function create_food_sellers_post_type()
-	{
-		$labels = array(
-			'name'                  => _x('Vendedores', 'Post Type General Name', 'fa_ifpa'),
-			'singular_name'         => _x('Vendedor', 'Post Type Singular Name', 'fa_ifpa'),
-			'menu_name'             => __('Vendedores', 'fa_ifpa'),
-			'name_admin_bar'        => __('Vendedor', 'fa_ifpa'),
-			'all_items'             => __('Todos os vendedores', 'fa_ifpa'),
-			'add_new_item'          => __('Adicionar novo vendedor', 'fa_ifpa'),
-			'add_new'               => __('Adicionar novo', 'fa_ifpa'),
-			'new_item'              => __('Novo vendedor', 'fa_ifpa'),
-			'edit_item'             => __('Editar dados do vendedor', 'fa_ifpa'),
-			'update_item'           => __('Atualizar dados do vendedor', 'fa_ifpa'),
-			'featured_image'        => __('Logotipo', 'fa_ifpa'),
-			'set_featured_image'    => __('Adicionar logotipo', 'fa_ifpa'),
-			'remove_featured_image' => __('Remover logotipo', 'fa_ifpa'),
-			'use_featured_image'    => __('Usar como logotipo', 'fa_ifpa'),
-		);
-		$args = array(
-			'label'                 => __('Vendedor', 'fa_ifpa'),
-			'description'           => __('Vendedores de alimentos', 'fa_ifpa'),
-			'labels'                => $labels,
-			'supports'              => array('title', 'thumbnail'),
-			'hierarchical'          => false,
-			'public'                => true,
-			'show_ui'               => true,
-			'show_in_menu'          => true,
-			'menu_position'         => 5,
-			'menu_icon'             => 'dashicons-store',
-			'show_in_admin_bar'     => true,
-			'show_in_nav_menus'     => true,
-			'can_export'            => true,
-			'has_archive'           => true,
-			'exclude_from_search'   => false,
-			'publicly_queryable'    => true,
-			'rewrite'               => false,
-			'capability_type'       => 'page',
-			'show_in_rest'          => true,
-		);
-		register_post_type('food_sellers', $args);
-	}
-
-	*/
-
 	// Build seller base 
 
 	public function create_seller_role()
@@ -185,7 +138,7 @@ class Foodappifpa_Admin
 			'context'      => 'normal',
 			'priority'     => 'default',
 			'show_on_cb' => array($this, 'cmb_show_meta_to_chosen_roles'),
-			'show_on_roles' => array( 'food_seller', 'administrator' ),			
+			'show_on_roles' => array('food_seller', 'administrator'),
 		));
 
 		$cmb->add_field(array(
@@ -272,27 +225,28 @@ class Foodappifpa_Admin
 
 	// Create custom metabox field types and filters
 
-	public function cmb_show_meta_to_chosen_roles( $cmb ) {
-		$roles = $cmb->prop( 'show_on_roles', array() );
-	
+	public function cmb_show_meta_to_chosen_roles($cmb)
+	{
+		$roles = $cmb->prop('show_on_roles', array());
+
 		// Do not limit the box display unless the roles are defined.
-		if ( empty( $roles ) ) {
+		if (empty($roles)) {
 			return true;
 		}
-	
-	
+
+
 		$user = wp_get_current_user();
-	
+
 		// No user found, return
-		if ( empty( $user ) ) {
+		if (empty($user)) {
 			return false;
 		}
-	
-		$has_role = array_intersect( (array) $roles, $user->roles );
-	
+
+		$has_role = array_intersect((array)$roles, $user->roles);
+
 		// Will show the box if user has one of the defined roles.
-		return ! empty( $has_role );
-	}	
+		return !empty($has_role);
+	}
 
 	public function cmb2_render_opening_hours_field_callback($field, $value, $object_id, $object_type, $field_type)
 	{
@@ -393,6 +347,7 @@ class Foodappifpa_Admin
 			'object_types' => array('food_products'),
 			'context'      => 'normal',
 			'priority'     => 'default',
+			'show_in_rest' => WP_REST_Server::READABLE
 		));
 
 		$cmb->add_field(array(
@@ -433,6 +388,7 @@ class Foodappifpa_Admin
 				'file_text' => 'Imagem:',
 			),
 		));
+
 	}
 
 	public function create_food_taxonomy()
@@ -456,49 +412,6 @@ class Foodappifpa_Admin
 		register_taxonomy('food_category', array('food_products'), $args);
 	}
 
-	public function cmb2_get_post_options($query_args)
-	{
-
-		$args = wp_parse_args($query_args, array(
-			'product_seller'   => '',
-		));
-
-		$posts = get_posts($args);
-
-		$post_options = array();
-		if ($posts) {
-			foreach ($posts as $post) {
-				$post_options[$post->ID] = $post->post_title;
-			}
-		}
-
-		return $post_options;
-
-
-		$args = array(
-			'role'           => 'food_seller',
-			'fields'         => 'all_with_meta',
-		);
-
-
-		$user_query = new WP_User_Query($args);
-
-
-		if (!empty($user_query->results)) {
-			foreach ($user_query->results as $user) { }
-		} else { }
-	}
-
-	/**
-	 * Gets 5 posts for your_post_type and displays them as options
-	 * @return array An array of options that matches the CMB2 options array
-	 */
-	function cmb2_get_your_post_type_post_options()
-	{
-		return cmb2_get_post_options(array('post_type' => 'your_post_type', 'numberposts' => 5));
-	}
-
-
 
 	/**
 	 * General functions
@@ -506,7 +419,7 @@ class Foodappifpa_Admin
 
 	public function disable_gutenberg($current_status, $post_type)
 	{
-		if ($post_type === 'food_products' || $post_type === 'food_sellers') return false;
+		if ($post_type === 'food_products') return false;
 		return $current_status;
 	}
 
@@ -522,4 +435,23 @@ class Foodappifpa_Admin
 
 		return $title;
 	}
+
+	public function change_author_box_title() {
+		global $wp_meta_boxes;
+		$wp_meta_boxes['food_products']['normal']['core']['authordiv']['title']= 'Vendedor';
+	}	
+
+	public function show_only_sellers_on_food_ctp( $query_args, $r ){
+
+		$screen = get_current_screen();
+		
+		if( $screen->post_type == 'food_products' ):
+			$query_args['role'] = array('food_seller');
+		
+			unset( $query_args['who'] );
+		endif;
+		
+		return $query_args;
+
+	}	
 }
