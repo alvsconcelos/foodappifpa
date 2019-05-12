@@ -139,6 +139,7 @@ class Foodappifpa_Admin
 			'priority'     => 'default',
 			'show_on_cb' => array($this, 'cmb_show_meta_to_chosen_roles'),
 			'show_on_roles' => array('food_seller', 'administrator'),
+			'show_in_rest' => WP_REST_Server::READABLE
 		));
 
 		$cmb->add_field(array(

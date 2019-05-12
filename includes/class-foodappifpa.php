@@ -174,7 +174,7 @@ class Foodappifpa
 
 		$this->loader->add_action('cmb2_init', $plugin_admin, 'create_seller_data_metaboxes');
 		$this->loader->add_action('cmb2_init', $plugin_admin, 'create_product_data_metaboxes');
-		$this->loader->add_action('cmb2_save_field__faproduct_fireSavedEvent', $plugin_admin, 'my_post_save_function', 20, 3);
+		// $this->loader->add_action('cmb2_save_field__faproduct_fireSavedEvent', $plugin_admin, 'my_post_save_function', 20, 3);
 
 		/**
 		 * Filters
