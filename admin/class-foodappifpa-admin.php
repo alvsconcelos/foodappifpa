@@ -219,9 +219,20 @@ class Foodappifpa_Admin
 		$cmb->add_field(array(
 			'name' => 'Horário de funcionamento',
 			'desc' => 'Caso o estabelecimento não abra em um dia da semana, deixar os campos relacionados a este dia vazios.',
-			'id' => $prefix . 'adres',
+			'id' => $prefix . 'open_hours',
 			'type' => 'opening_hours',
 		));
+
+		$cmb->add_field( array(
+			'name'    => 'Logotipo',
+			'id' => $prefix . 'logo',
+			'type'    => 'file',
+			'text'    => array(
+				'add_upload_file_text' => 'Adicionar logotipo'
+			),
+			'query_args' => array('type' => 'image'),
+			'preview_size' => 'large', // Image size to use when previewing in the admin.
+		) );		
 	}
 
 	// Create custom metabox field types and filters
