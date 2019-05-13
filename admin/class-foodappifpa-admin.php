@@ -231,7 +231,7 @@ class Foodappifpa_Admin
 				'add_upload_file_text' => 'Adicionar logotipo'
 			),
 			'query_args' => array('type' => 'image'),
-			'preview_size' => 'large', // Image size to use when previewing in the admin.
+			'preview_size' => 'large', 
 		) );		
 	}
 
@@ -265,7 +265,7 @@ class Foodappifpa_Admin
 		echo $field_type->_desc(true);
 
 		$value = wp_parse_args($value, array());
-		$days_of_the_week = array('Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado');
+		$days_of_the_week = array('Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo');
 		$statuses = array(
 			'_open' => 'Abre:',
 			'_close' => 'Fecha:'
@@ -318,16 +318,12 @@ class Foodappifpa_Admin
 			'edit_item'             => __('Editar dados do produto', 'fa_ifpa'),
 			'update_item'           => __('Atualizar dados do produto', 'fa_ifpa'),
 			'all_items'             => __('Todos os produtos', 'fa_ifpa'),
-			'featured_image'        => __('Imagem principal', 'fa_ifpa'),
-			'set_featured_image'    => __('Adicionar imagem principal', 'fa_ifpa'),
-			'remove_featured_image' => __('Remover imagem principal', 'fa_ifpa'),
-			'use_featured_image'    => __('Usar como imagem principal', 'fa_ifpa'),
 		);
 		$args = array(
 			'label'                 => __('Produto', 'fa_ifpa'),
 			'description'           => __('Itens do cardápio', 'fa_ifpa'),
 			'labels'                => $labels,
-			'supports'              => array('title', 'thumbnail', 'author'),
+			'supports'              => array('title', 'author'),
 			'taxonomies'			=> array('food_category'),
 			'hierarchical'          => false,
 			'public'                => true,
@@ -361,6 +357,15 @@ class Foodappifpa_Admin
 			'priority'     => 'default',
 			'show_in_rest' => WP_REST_Server::READABLE
 		));
+
+		$cmb->add_field(array(
+			'name' => __('Descrição', 'fa_ifpa'),
+			'id' => $prefix . 'views',
+			'type' => 'textarea_small',
+			'attributes' => array(
+				'style' => 'width:100%;',
+			),
+		));		
 
 		$cmb->add_field(array(
 			'name' => __('Descrição', 'fa_ifpa'),
