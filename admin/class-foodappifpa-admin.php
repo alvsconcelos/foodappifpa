@@ -433,7 +433,7 @@ class Foodappifpa_Admin
 	{
 		register_rest_route(
 			'food-api',
-			'register-views/(?P<id>\d+',
+			'register-views/(?P<id>\d+)',
 			array(
 				'methods' => 'GET',
 				'args' => array(
