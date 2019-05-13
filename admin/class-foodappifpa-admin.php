@@ -223,7 +223,7 @@ class Foodappifpa_Admin
 			'type' => 'opening_hours',
 		));
 
-		$cmb->add_field( array(
+		$cmb->add_field(array(
 			'name'    => 'Logotipo',
 			'id' => $prefix . 'logo',
 			'type'    => 'file',
@@ -231,8 +231,8 @@ class Foodappifpa_Admin
 				'add_upload_file_text' => 'Adicionar logotipo'
 			),
 			'query_args' => array('type' => 'image'),
-			'preview_size' => 'large', 
-		) );		
+			'preview_size' => 'large',
+		));
 	}
 
 	// Create custom metabox field types and filters
@@ -365,7 +365,7 @@ class Foodappifpa_Admin
 			'attributes' => array(
 				'style' => 'width:100%;',
 			),
-		));		
+		));
 
 		$cmb->add_field(array(
 			'name' => __('Descrição', 'fa_ifpa'),
@@ -405,7 +405,6 @@ class Foodappifpa_Admin
 				'file_text' => 'Imagem:',
 			),
 		));
-
 	}
 
 	public function create_food_taxonomy()
@@ -427,6 +426,26 @@ class Foodappifpa_Admin
 			'show_in_rest'               => true,
 		);
 		register_taxonomy('food_category', array('food_products'), $args);
+	}
+
+
+	public function my_register_route()
+	{
+		register_rest_route(
+			'register_views',
+			'my-phrase',
+			array(
+				'methods' => 'GET',
+				'callback' => array($this, 'custom_phrase'),
+				// 'permission_callback' => function () {
+				// 	return current_user_can('edit_posts');
+				// },
+			)
+		);
+	}
+	public function custom_phrase()
+	{
+		return rest_ensure_response('Hello World! This is my first REST API');
 	}
 
 
@@ -453,22 +472,23 @@ class Foodappifpa_Admin
 		return $title;
 	}
 
-	public function change_author_box_title() {
+	public function change_author_box_title()
+	{
 		global $wp_meta_boxes;
-		$wp_meta_boxes['food_products']['normal']['core']['authordiv']['title']= 'Vendedor';
-	}	
+		$wp_meta_boxes['food_products']['normal']['core']['authordiv']['title'] = 'Vendedor';
+	}
 
-	public function show_only_sellers_on_food_ctp( $query_args, $r ){
+	public function show_only_sellers_on_food_ctp($query_args, $r)
+	{
 
 		$screen = get_current_screen();
-		
-		if( $screen->post_type == 'food_products' ):
-			$query_args['role'] = array('food_seller');
-		
-			unset( $query_args['who'] );
-		endif;
-		
-		return $query_args;
 
-	}	
+		if ($screen->post_type == 'food_products') :
+			$query_args['role'] = array('food_seller');
+
+			unset($query_args['who']);
+		endif;
+
+		return $query_args;
+	}
 }
