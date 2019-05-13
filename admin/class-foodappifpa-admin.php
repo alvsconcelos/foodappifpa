@@ -359,7 +359,7 @@ class Foodappifpa_Admin
 		));
 
 		$cmb->add_field(array(
-			'name' => __('Descrição', 'fa_ifpa'),
+			'name' => __('Views', 'fa_ifpa'),
 			'id' => $prefix . 'views',
 			'type' => 'textarea_small',
 			'attributes' => array(
@@ -449,7 +449,16 @@ class Foodappifpa_Admin
 	}
 	public function register_views_on_post($data)
 	{	
-		return rest_ensure_response( $data[ 'id' ]);
+		$post_id = $data['id'];
+		$actual_views_count = get_post_meta( $post_id, '_faproduct_views', true );
+		if($actual_views_count != null && !empty($actual_views_count)) {
+			$new_views_count = $actual_views_count + 1;
+		} else {
+			$actual_views_count = 0;
+			$new_views_count = $actual_views_count + 1;
+		}
+		$update_result = update_post_meta( $post_id, '_faproduct_views', $new_views_count, $actual_views_count );
+		return rest_ensure_response($update_result);
 	}
 
 
