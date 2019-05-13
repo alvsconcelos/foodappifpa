@@ -359,12 +359,8 @@ class Foodappifpa_Admin
 		));
 
 		$cmb->add_field(array(
-			'name' => __('Views', 'fa_ifpa'),
 			'id' => $prefix . 'views',
-			'type' => 'textarea_small',
-			'attributes' => array(
-				'style' => 'width:100%;',
-			),
+			'type' => 'hidden',
 		));
 
 		$cmb->add_field(array(
