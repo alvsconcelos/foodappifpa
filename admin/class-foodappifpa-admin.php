@@ -449,8 +449,7 @@ class Foodappifpa_Admin
 	}
 	public function register_views_on_post($data)
 	{	
-		dd($data);
-		// return rest_ensure_response($data);
+		return rest_ensure_response( $data[ 'id' ]);
 	}
 
 
