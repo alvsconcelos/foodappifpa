@@ -429,23 +429,27 @@ class Foodappifpa_Admin
 	}
 
 
-	public function my_register_route()
+	public function register_plugin_api_routes()
 	{
 		register_rest_route(
-			'register_views',
-			'my-phrase',
+			'food-api',
+			'register-views/(?P<id>\d+',
 			array(
 				'methods' => 'GET',
-				'callback' => array($this, 'custom_phrase'),
-				// 'permission_callback' => function () {
-				// 	return current_user_can('edit_posts');
-				// },
+				'args' => array(
+					'id' => array(
+						'validate_callback' => function ($param, $request, $key) {
+							return is_numeric($param);
+						}
+					),
+				),
+				'callback' => array($this, 'register_views_on_post'),
 			)
 		);
 	}
-	public function custom_phrase()
+	public function register_views_on_post($data)
 	{
-		return rest_ensure_response('Hello World! This is my first REST API');
+		return rest_ensure_response($data);
 	}
 
 

@@ -167,7 +167,7 @@ class Foodappifpa
 		$this->loader->add_action('init', $plugin_admin, 'create_food_products_post_type');
 		$this->loader->add_action('init', $plugin_admin, 'create_food_taxonomy');
 		$this->loader->add_action('add_meta_boxes_food_products', $plugin_admin, 'change_author_box_title');
-		$this->loader->add_action('rest_api_init', $plugin_admin, 'my_register_route');
+		$this->loader->add_action('rest_api_init', $plugin_admin, 'register_plugin_api_routes');
 
 		/**
 		 * Metaboxes
