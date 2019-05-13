@@ -448,8 +448,9 @@ class Foodappifpa_Admin
 		);
 	}
 	public function register_views_on_post($data)
-	{
-		return rest_ensure_response($data);
+	{	
+		dd($data);
+		// return rest_ensure_response($data);
 	}
 
 
